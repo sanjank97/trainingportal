@@ -1,0 +1,175 @@
+.exam_time span{
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+}
+.question >div{
+    padding-left: 0;
+    margin-left: 0!important;
+}
+.question
+{
+    -webkit-box-shadow: inset 0px 0px 5px 4px rgba(245,245,245,1);
+    -moz-box-shadow: inset 0px 0px 5px 4px rgba(245,245,245,1);
+    box-shadow: inset 0px 0px 5px 4px rgba(245,245,245,1);
+    padding: 45px;
+}
+.custom_btn .btn-primary {
+    background-color: #242323;
+    border: 1px solid #242323;
+    margin-right: 10px;
+}
+.subtitle{
+    margin-top: 5px;
+    font-size: 20px;
+    padding: 10px;
+}
+.custom_btn .btn-primary:hover {
+    background-color: #9f9898;
+    border: 1px solid #9f9898;
+    color: #fff;
+}
+.single_video .actions{
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.custom_btn .btn-success {
+    background-color: #21bf73;
+}
+.custom_btn #nxt{
+    margin-left: 0px;
+}
+.list {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 20px;
+}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+.options {
+    position: relative;
+    padding-left: 40px;
+}
+#options label {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.options input {
+    opacity: 0;
+}
+.options input[type="radio"]:checked~.checkmark {
+    background: #21bf73;
+    transition: 300ms ease-in-out 0s;
+}
+.options input[type="radio"]:checked~.checkmark:after {
+    transform: translate(-50%, -50%) scale(1);
+}
+.test_parent .pcoded-inner-content{
+    padding: 30px;
+}
+.high_bold{
+    font-weight:600;
+    color:#000;
+}
+/* Style for radio button */
+input[type="radio"] {
+-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
+display: inline-block;
+width: 20px;
+height: 20px;
+border: 2px solid #000;
+border-radius: 0px;
+outline: none;
+transition-duration: 0.4s;
+}
+/* Style for selected radio button */
+input[type="radio"]:checked {
+    background-color: #2695d6;
+}
+#options span{
+    font-size: 14px;
+}
+#options p{
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: capitalize;
+}
+.btn.btn_completed{
+    color: #fff;
+    background: red;
+}
+.main_video .embed-responsive img{
+    position: absolute;
+    display: block;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    overflow: hidden;
+    top: 40%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.testnotes{
+    font-size: 14px;
+    text-align: center;
+    font-weight: 500;
+}
+.documentMsg p{
+    font-size: 16px;
+    color: #000;
+    font-weight: 400;
+}
+.documentMsg p a{
+    color: red;
+}
+.form-group {
+    margin-bottom: 10px;
+}
+#prev{
+    padding: 10px 20px;
+}
+#nxt{
+    margin-left: 0px;
+    BACKGROUND: #2695d6;
+    border-color: #2695d6;
+    width: 120px;
+    transition: 0.5s;
+}
+.custom_btn #nxt:hover {
+    margin-left: 0px;
+    background: #268dc9;
+    border-color: #268dc9;
+    transition: 0.5s;
+}
+#ques span{
+    color: #000;
+}
+body.auth .theme-btn, .site_btn{
+    cursor: pointer;
+}
+.alllist_course .card-title{
+    padding: 5px 0;
+    text-transform: uppercase;
+    font-size: 18px;
+    color: #000;
+}
+.alllist_course .wrap_image img {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    background: #f3f3f3;
+}
+.alllist_course .card{
+    -webkit-box-shadow: 5px 5px 4px 4px rgba(245,245,245,1);
+    -moz-box-shadow: 5px 5px 4px 4px rgba(245,245,245,1);
+    box-shadow: 5px 5px 4px 4px rgba(245,245,245,1);
+}
