@@ -1,13 +1,17 @@
 <?php
      include '../includes/header_top.php';
      include('../../db_connection.php');
+
      $query="select * from employee";
      $emp_result=mysqli_query($con,$query);
      $totalRows=mysqli_num_rows($emp_result);   
      $query ="select * from course where course_type=1 order by id desc";
      $exlusive_test_result = mysqli_query($con,$query);
      $exlusive_test_num = mysqli_num_rows($exlusive_test_result); 
+  
 
+     require_once('../../trainingClass.php');
+     $training = new Training($con);
    
 ?>
 
@@ -55,16 +59,31 @@
                             <div class="page-wrapper">
                                 <!-- Page-body start -->
                                 <div class="page-body">
-                                <?php
-                                if (isset($_SESSION['success'])) {
-                                    echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
-                                    unset($_SESSION['success']);
-                                }
-                                if (isset($_SESSION['error'])) {
-                                    echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
-                                    unset($_SESSION['error']);
-                                }
-                                ?>
+                                    <div class="search_wrap">
+                                        <div class="input-search">
+                                            <label>Search</label> <br>
+                                            <input type="text" class="form-control" id="keyword" placeholder="Search By Keyword">
+                                            <span class="input-group-addon search-btn"><i class="ti-search"></i></span>
+                                        </div>
+                                        
+                                        <div class="sortby" style="margin-bottom:30px;">
+                                            <label>Sort By:</label>
+                                            <select name="sortby" id="sortby" class="form-control">
+                                                <option value="name">Name</option>
+                                                <option value="score">Latest Score</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <?php
+                                        if (isset($_SESSION['success'])) {
+                                            echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+                                            unset($_SESSION['success']);
+                                        }
+                                        if (isset($_SESSION['error'])) {
+                                            echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+                                            unset($_SESSION['error']);
+                                        }
+                                    ?>
                                     <!-- Basic table card start -->
                                     <div class="card" style="display:none">
                                         <div class="card-header text-success emp_status">
@@ -79,18 +98,12 @@
                                                 Add
                                             </button>
                                             <div class="card-header-right">
-                                                <ul class="list-unstyled card-option">
-                                                    <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                                    <li><i class="fa fa-window-maximize full-card"></i></li>
-                                                    <li><i class="fa fa-minus minimize-card"></i></li>
-                                                    <li><i class="fa fa-refresh reload-card"></i></li>
-                                                    <li><i class="fa fa-trash close-card"></i></li>
-                                                </ul>
+                                            
                                             </div>
                                         </div>
                                         <div class="card-block table-border-style">
                                             <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table" id="scoreTable">
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
@@ -124,9 +137,7 @@
                                                                    }else{
                                                                     $docmsg ="<span class='text-danger'>Not Uploaded Yet!</span>";
                                                                    }
-
-
-                                                                    echo '<tr>
+                                                                    echo '<tr data-score="'.$training->getlatestScorebyEmpId($row['id']).'" data-name="'.$row['name'].'">
                                                                                 <th scope="row">'. $start_increament + (++$key).'</th>
                                                                                 <td><a style="color:#007bffc7" href="view.php?employee_id='.$row['id'].'"  style="margin-left:10px;">'.$row['name'].'</a></td>
                                                                                 <td>'.$row['email'].'</td>
@@ -142,18 +153,15 @@
                                                                                     echo '<a href="javascript:void(0)" class="text-primary emp_status_btn" data-status-id="'.$row['id'].'" style="margin-left:10px;  font-size:24px; color:#007bffc7;"><i class="fa fa-toggle-on" aria-hidden="true" style="color:#007bffc7;"></i></a>';
                                                                                 }
                                                                                 echo '</td>
-                                                                                <td>'.$docmsg.'</td>
+                                                                                <td>'.$training->getstatusdocument($row['id']).'</td>
                                                                                 <td><a href="viewtest.php?employee_id='.$row['id'].'"  style="margin-left:10px;color:green;">View</a></td>
                                                                                 <td><a href="view.php?employee_id='.$row['id'].'"  style="margin-left:10px;">View</a></td>
                                                                                 <td>
                                                                                 <a href="#" class="emp_edit_btn" data-edit-id="'.$row['id'].'" data-toggle="modal" data-target="#myModal2"><i class="ti-pencil-alt edit_icon"  ></i></a>
                                                                                 <a href="#" class="emp_delete_btn"  data-delete-id="'.$row['id'].'" style="color:red;margin-left:10px;"><i class="ti-trash delete_icon" ></i></a>
                                                                                 ';
-                                                                              
-                                                                    
-                                                                              echo '</td>
-                                                                                    
-                                                                            </tr>';
+                                                                              echo '</td>  
+                                                                    </tr>';
                                                                 }
                                                                 
 
@@ -182,7 +190,7 @@
                                                 }
                                              }   
                                            ?>
-                                            </ul>
+                                        </ul>
                                     </div>
 
                                 </div>
@@ -353,7 +361,7 @@ $(document).ready(function() {
         }
     })
 
-    $('.emp_edit_btn').click(function() {
+    $(document).on('click','.emp_edit_btn', function() {
         let data_edit_id = $(this).attr('data-edit-id');
         console.log(data_edit_id);
         $.ajax({
@@ -377,7 +385,7 @@ $(document).ready(function() {
     
 
     });
-    $('.emp_delete_btn').click(function() {
+    $(document).on('click','.emp_delete_btn', function() {
         let data_delete_id = $(this).attr('data-delete-id');
         Swal.fire({
             title: 'Are you sure?',
@@ -412,10 +420,9 @@ $(document).ready(function() {
             }
         })
     });
-    $('.emp_status_btn').click(function() {
+    $(document).on('click','.emp_status_btn',function() {
         let data_status_id = jQuery(this).attr('data-status-id');
         let fatoggleon = jQuery(this).find('i').hasClass("fa-toggle-on");
-
         if (fatoggleon) {
             jQuery(this).find('i').removeClass("fa-toggle-on");
             jQuery(this).find('i').addClass("fa-toggle-off");
@@ -423,17 +430,12 @@ $(document).ready(function() {
             jQuery(this).find('i').removeClass("fa-toggle-off");
             jQuery(this).find('i').addClass("fa-toggle-on");
         }
-
-
-        console.log(data_status_id);
         $.ajax({
             type: 'post',
             url: 'employee_handler.php',
             data: {
                 'data_status_id': data_status_id
             },
-            // contentType: "application/json; charset=utf-8",
-            // traditional: true,
             dataType: 'text',
             success: function(data) {
                 console.log(data);

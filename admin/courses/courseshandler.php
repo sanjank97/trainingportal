@@ -60,7 +60,7 @@ if (isset($_POST['add_sub_course'])) {
   $course_title        = $_POST['course_title'];
   $courseID            = $_POST['courseid'];
   $watch_priority      = $_POST['watch_priority'];
-  $course_id           = generate_unique_id();
+  $course_id           = time();
   $course_video        = rtrim($video_file, ',');
   $course_pdf          = $pdfFile;
   $course_thumbnail    = $course_thumbnail;

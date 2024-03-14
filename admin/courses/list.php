@@ -197,7 +197,7 @@ $num = mysqli_num_rows($result);
                                                             <span class="form-bar"></span>
                                                         </div>
                                                         <div class="form-group form-default">
-                                                            <label class="float-label">Must be watch</label>
+                                                            <label class="float-label">Video Must be watch</label>
                                                              <input type="radio" name="watch_priority" id="watch_priority_video" value="0" checked />
                                                             <span class="form-bar"></span>
                                                         </div>
@@ -212,7 +212,7 @@ $num = mysqli_num_rows($result);
                                                             <span class="form-bar"></span>
                                                         </div>
                                                         <div class="form-group form-default">
-                                                            <label class="float-label">Must be view</label>
+                                                            <label class="float-label">PDF Must be view</label>
                                                              <input type="radio" name="watch_priority" id="priority_view" value="1" />
                                                             <span class="form-bar"></span>
                                                         </div>

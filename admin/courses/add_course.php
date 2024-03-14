@@ -79,7 +79,7 @@ move_uploaded_file($filetemp_name, $file_upload_path);
   $course_title        = $_POST['course_title'];
   $course_type         = $_POST['course_type'];
   $watch_priority      = $_POST['watch_priority'];
-  $course_id           = generate_unique_id();
+  $course_id           = time();
   $course_video        = rtrim($video_file, ',');
   $course_pdf          = $pdfFile;
   $course_thumbnail    = $course_thumbnail;

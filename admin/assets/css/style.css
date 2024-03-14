@@ -15788,3 +15788,25 @@ select.courseType1{
     background: #2695d6;
     display: block;
 }
+
+.search_wrap{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding:10px;
+}
+.search_wrap .input-search{
+  max-width: 300px;
+  position: relative;
+}
+.sortby{
+  max-width: 236px;
+  margin-bottom: 30px;
+  width: 50%;
+}
+.search_wrap .search-btn{
+  position: absolute;
+  top: 46%;
+  right: 0;
+  cursor: pointer;
+}

@@ -303,7 +303,7 @@ $result_query    = mysqli_query($con, $subcourse_query);
                                                     <span class="form-bar"></span>
                                                 </div>
                                                 <div class="form-group form-default">
-                                                        <label class="float-label">Must be watch</label>
+                                                        <label class="float-label">Video Must be watch</label>
                                                             <input type="radio" name="watch_priority" value="0" checked />
                                                         <span class="form-bar"></span>
                                                     </div>
@@ -318,7 +318,7 @@ $result_query    = mysqli_query($con, $subcourse_query);
                                                     <span class="form-bar"></span>
                                                 </div>
                                                 <div class="form-group form-default">
-                                                        <label class="float-label">Must be watch</label>
+                                                        <label class="float-label">PDF Must be watch</label>
                                                             <input type="radio" name="watch_priority" value="1" />
                                                         <span class="form-bar"></span>
                                                     </div>

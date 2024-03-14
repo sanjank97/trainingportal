@@ -1,6 +1,8 @@
 <?php
     include 'includes/header_top.php';
     include('../db_connection.php'); 
+    require_once('../trainingClass.php');
+    $training = new Training($con);
 ?>
 
 <div id="pcoded" class="pcoded">
@@ -30,6 +32,23 @@
                                     <div class="row">
                                         <div class="col-xl-9 col-md-12">
                                             <div class="card table-card">
+
+                                                <div class="search_wrap">
+                                                    <div class="input-search">
+                                                        <label>Search</label> <br>
+                                                        <input type="text" class="form-control" id="keyword" placeholder="Search By Keyword">
+                                                        <span class="input-group-addon search-btn"><i class="ti-search"></i></span>
+                                                    </div>
+                                                   
+                                                    <div class="sortby" style="margin-bottom:30px;">
+                                                        <label>Sort By:</label>
+                                                        <select name="sortby" id="sortby" class="form-control">
+                                                            <option value="name">Name</option>
+                                                            <option value="score">Latest Score</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
                                                 <div class="card-header">
                                                     <h5>Top Employes</h5>
                                                     <div class="card-header-right">
@@ -39,32 +58,26 @@
                                                 </div>
                                                 <div class="card-block">
                                                     <div class="table-responsive">
-                                                        <table class="table table-hover">
+                                                        <table class="table table-hover" id="scoreTable">
                                                             <thead>
                                                                 <tr>
                                                                     <th>ID</th>
                                                                     <th>Name</th>
-                                                                    <th>Email</th>
                                                                     <th>Course Pending</th>
+                                                                    <th>Score</th>
+                                                                    <th>Document</th>
                                                                     <th>Last Login</th>
                                                                     <th class="text-right">Status</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 <?php
-                                                                    $query  ="select * from employee ORDER BY last_login DESC";
-                                                                    $result =mysqli_query($con,$query);
-                                                                    $num    =mysqli_num_rows($result);  
-                                                                
-                                                                
-                                                                    $Cquery  ="select * from course order by id desc";
-                                                                    $Cresult =mysqli_query($con,$Cquery);
-                                                                    $Total_course_count    =mysqli_num_rows($Cresult);            
-                                                                    
-                                                                
-                                                                
-                                                                
-                                                                
+                                                                    $query      ="select * from employee ORDER BY last_login DESC";
+                                                                    $result     =mysqli_query($con,$query);
+                                                                    $num        =mysqli_num_rows($result);  
+                                                                    $Cquery     ="select * from course order by id desc";
+                                                                    $Cresult    =mysqli_query($con,$Cquery);
+                                                                    $Total_course_count =mysqli_num_rows($Cresult);            
                                                                     if($num >0)
                                                                     {
                                                                         
@@ -120,17 +133,17 @@
                                                                             }
 
                                                                             ///echo $timeAgo . '====<br>';
-                                                                            echo '<tr>
+                                                                            echo '<tr data-score="'.$training->getlatestScorebyEmpId($row['id']).'" data-name="'.$row['name'].'">
                                                                                     <td>'.++$key.'</td>
                                                                                     <td><a style="color:#007bffc7;" href="'.BASE_URL.'employee/view.php?employee_id='.$row['id'].'">'.$row['name'].'</td>
-                                                                                    <td>'.$row['email'].'</td>
                                                                                     <td>'.$Total_emp_count.'/'.$Total_course_count.'</td>
+                                                                                    <td>'.$training->getlatestScorebyEmpId($row['id']).''.$training->getTotalExamEmpId($row['id']).'</td>
+                                                                                    <td>'.$training->getstatusdocument($row['id']).'</td>
                                                                                     <td>'.$timeAgo.'</td>
                                                                                     <td class="text-right">
-                                                                                   
                                                                                        <span class="'.$status.'">'.$status.'</span>
                                                                                     </td>
-                                                                                 </tr>';
+                                                                            </tr>';
 
                                                                         }
                                                                     }
@@ -204,7 +217,82 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    $('#sortby').change(function() {
+        var sortBy = $(this).val();
+        if (sortBy == 'name') {
+            sortByName();
+        } else if (sortBy == 'score') {
+            sortByScore();
+        }
+    });
+});
 
+function sortByName() {
+    var rows = $('#scoreTable tbody').find('tr').get();
+    rows.sort(function(a, b) {
+        var nameA = $(a).data('name').toUpperCase();
+        var nameB = $(b).data('name').toUpperCase();
+        return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
+    });
+    $.each(rows, function(index, row) {
+        $('#scoreTable').append(row);
+    });
+}
+
+function sortByScore() {
+    var rows = $('#scoreTable tbody').find('tr').get();
+    rows.sort(function(a, b) {
+        var scoreA = $(a).data('score');
+        var scoreB = $(b).data('score');
+
+        // Check if scoreA or scoreB is "N/A"
+        if (scoreA === "N/A" && scoreB === "N/A") {
+            return 0;
+        } else if (scoreA === "N/A") {
+            return 1; // Move "N/A" to the bottom
+        } else if (scoreB === "N/A") {
+            return -1; // Move "N/A" to the bottom
+        }
+
+        scoreA = parseFloat(scoreA);
+        scoreB = parseFloat(scoreB);
+        return scoreB - scoreA;
+    });
+    $.each(rows, function(index, row) {
+        $('#scoreTable').append(row);
+    });
+}
+
+$(document).ready(function(){
+    $(document).on('keyup', "#keyword", function(){
+        let keyword = $(this).val();
+        $.ajax({
+            url: '<?php echo ROOT_URL; ?>trainingClass.php', 
+            type: 'POST',
+            data: {
+                keyword: keyword,
+                action:'search_keyword'
+            },
+            success: function(response) {
+                // Handle success response here
+                console.log(response);
+                if(response){
+                    $('#scoreTable tbody').html(response);
+                }
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(xhr.responseText);
+            }
+        });
+
+    });
+});
+</script>
 <?php
+   
    include 'includes/footer.php';
 ?>
